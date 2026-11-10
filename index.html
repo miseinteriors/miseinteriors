@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Mise Interiors – sisekujundus Tallinnas. Julged, praktilised ja ajatud kodud.">
+<meta property="og:title" content="Mise Interiors">
+<meta property="og:description" content="Sisekujundus Tallinnas. Julged, praktilised ja ajatud kodud.">
+<meta property="og:image" content="img/hero.jpg">
+<meta name="theme-color" content="#1E2418">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mise Interiors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* Layout: collage. Huge pink serif type laid over overlapping image pieces on deep olive; the live 3D room is the lead collage piece. Sections alternate olive / pink / cream bands so the page has rhythm. Single look by choice. */
+:root{
+  --bg:#1E2418; --bg2:#262E1F; --fg:#F3E9DC; --muted:#BDB5A6; --line:rgba(243,233,220,.16); --line2:rgba(243,233,220,.34);
+  --pink:#F3A5B8; --terra:#C9653F; --ochre:#E3B04B; --cobalt:#2440A8; --cream:#F3E9DC; --ink:#1E2418;
+  --a1:#2E5446; --a2:#B8664A; --a3:#D8A25A; --accent:#F3A5B8;
+  --f-display:"DM Serif Display", "Iowan Old Style", Georgia, serif;
+  --f-body:"DM Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, Menlo, Consolas, monospace;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  color-scheme:dark;
+}
+html[lang="et"] [data-l="en"], html[lang="en"] [data-l="et"]{display:none!important}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:70;opacity:.08;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{max-width:1360px;margin:0 auto;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:.9;margin:0;text-wrap:balance;letter-spacing:-.03em}
+em{font-style:italic}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--pink);outline-offset:4px}
+.label{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* NAV */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(30,36,24,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px}
+.brand{text-decoration:none;display:flex;align-items:baseline;gap:12px}
+.brand .mk{width:44px;height:28px;align-self:center;flex:none}
+.brand b{font-family:var(--f-display);font-weight:400;font-size:32px;letter-spacing:-.02em}
+.brand span{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.links{display:flex;gap:32px;font-size:15px;font-weight:500}
+.links a{text-decoration:none;transition:color .3s}
+.links a:hover{color:var(--pink)}
+.nav-r{display:flex;align-items:center;gap:18px}
+.lang{display:flex;gap:2px;font-family:var(--f-mono);font-size:12px}
+.lang button{border:0;background:none;color:var(--muted);padding:6px;cursor:pointer;font:inherit;letter-spacing:.1em}
+.lang button[aria-pressed="true"]{color:var(--pink)}
+.btn{display:inline-flex;align-items:center;gap:12px;border:2px solid var(--fg);background:transparent;color:var(--fg);font:600 15px/1 var(--f-body);padding:15px 24px;border-radius:999px;text-decoration:none;cursor:pointer;transition:background .3s,color .3s,border-color .3s,transform .3s var(--ease)}
+.btn:hover{background:var(--fg);color:var(--ink)}
+.btn.solid{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.btn.solid:hover{background:var(--cream);border-color:var(--cream);transform:rotate(-2deg)}
+.btn .arr{transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.nav .btn{padding:11px 18px;font-size:14px}
+@media (max-width:960px){.links{display:none}}
+@media (max-width:520px){.nav .btn{display:none}.brand span{display:none}}
+
+/* HERO: full-bleed moving image */
+.vhero{position:relative;margin-top:-79px;min-height:clamp(560px,92vh,940px);display:grid;align-items:center;overflow:hidden;background:var(--bg)}
+.vbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vshade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(20,24,16,.55),rgba(20,24,16,.25) 70%),linear-gradient(180deg,rgba(30,36,24,.55),rgba(30,36,24,.1) 35%,rgba(30,36,24,.75))}
+.vin{position:relative;z-index:1;display:grid;justify-items:center;text-align:center;gap:22px;padding-block:140px 90px}
+.vhero h1{font-size:clamp(64px,10.5vw,168px);line-height:.86;letter-spacing:-.04em;color:var(--pink);text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.vhero h1 em{color:var(--cream)}
+.vhero .lede{font-size:clamp(17px,1.5vw,20px);color:#EFE7DA;max-width:34em;text-wrap:balance}
+.vhero .label{color:#E7DCCB}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.vplay{position:absolute;z-index:2;right:max(20px,env(safe-area-inset-right,0px));bottom:20px;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(243,233,220,.6);background:rgba(30,36,24,.35);color:var(--cream);font:600 12px/1 var(--f-mono);cursor:pointer}
+.vplay:hover{background:var(--cream);color:var(--ink)}
+.reveal{animation:rise 1.2s var(--ease) both;animation-delay:var(--dl,0s)}
+@keyframes rise{from{opacity:.15;transform:translateY(26px)}to{opacity:1;transform:none}}
+/* SECTIONS */
+section.sec{padding-block:130px}
+.shead{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:48px;align-items:end;margin-bottom:64px}
+.shead h2{font-size:clamp(60px,8.4vw,132px);margin-top:18px;color:var(--pink)}
+.shead h2 em{color:var(--cream)}
+.shead p{color:var(--muted);max-width:30em;font-size:18px}
+@media (max-width:820px){.shead{grid-template-columns:1fr;gap:18px;margin-bottom:44px}section.sec{padding-block:90px}}
+
+/* services */
+.svc{border-top:2px solid var(--fg)}
+.row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px;align-items:center;padding:30px 0;border-bottom:1px solid var(--line2)}
+.svc{position:relative;isolation:isolate}
+.row h3{font-size:clamp(36px,4vw,60px);transition:color .4s}
+.row p{color:var(--muted);font-size:16px;transition:color .4s}
+@media (max-width:900px){.row{grid-template-columns:1fr;gap:12px;padding:26px 0}}
+
+/* process — pink band */
+.process{background:var(--pink);color:var(--ink)}
+.process .label{color:rgba(30,36,24,.7)}
+.process .shead h2{color:var(--ink)}
+.process .shead h2 em{color:var(--terra)}
+.process .shead p{color:rgba(30,36,24,.75)}
+.pgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px}
+.steps{display:flex;flex-direction:column}
+.step{min-height:68vh;display:flex;flex-direction:column;justify-content:center;gap:16px;opacity:.32;transition:opacity .6s;min-width:0}
+.step.on{opacity:1}
+.step .n{font-family:var(--f-display);font-size:88px;line-height:.8;color:var(--terra)}
+.step h3{font-size:clamp(40px,4.2vw,62px)}
+.step p{color:rgba(30,36,24,.82);max-width:25em;font-size:18px}
+.step .tag{align-self:flex-start;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:999px;padding:4px 12px}
+.pstage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 100px);align-self:start;display:flex;flex-direction:column;gap:14px}
+.view{position:relative;aspect-ratio:1264/843;max-width:100%;background:#1E2418;box-shadow:0 0 0 10px var(--cream);overflow:hidden;transform:rotate(1.2deg)}
+.view canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.view .lay{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s var(--ease)}
+.view.s5 .photo{opacity:1;transition:opacity 1.8s var(--ease) 1.2s}
+.view .cap{position:absolute;left:16px;right:16px;bottom:12px;display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);text-shadow:0 1px 6px rgba(0,0,0,.5);pointer-events:none;z-index:2}
+.meter{display:flex;gap:8px}
+.meter i{flex:1;height:4px;border-radius:4px;background:rgba(30,36,24,.18);position:relative;overflow:hidden}
+.meter i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease)}
+.meter i.on::after{transform:none}
+@media (max-width:900px){
+  .pgrid{grid-template-columns:1fr;gap:0}
+  .pstage{order:-1;top:calc(env(safe-area-inset-top,0px) + 78px);z-index:5;background:var(--pink);padding-block:10px;gap:8px}
+  .view{aspect-ratio:16/11;max-height:42vh;width:100%;transform:none;border-width:6px}
+  .step{min-height:56vh}.step .n{font-size:64px}
+}
+
+/* portfolio: full-bleed rows of three squares, no gaps; the name square moves along */
+#tood{padding-bottom:0}
+.plist{display:flex;flex-direction:column}
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.sq{position:relative;aspect-ratio:1;max-width:100%;overflow:hidden;background:var(--bg2)}
+.sq.im i{position:absolute;inset:-4%;background:var(--g);transition:transform 1.2s var(--ease)}
+.sq.im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.sq.im:hover i,.sq.im:hover img{transform:scale(1.04)}
+.sq.nm{background:var(--cream);color:var(--ink);display:grid;place-items:center;text-align:center;padding:24px}
+.sq.nm h3{font-family:var(--f-body);font-weight:400;font-size:clamp(16px,1.75vw,26px);line-height:1.3;letter-spacing:.08em;text-transform:uppercase;max-width:16em}
+.prow.n1 .nm{order:1}.prow.n2 .nm{order:2}
+.flag{position:absolute;top:12px;left:12px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);border:1px solid rgba(243,233,220,.45);padding:4px 8px;border-radius:999px;background:rgba(30,36,24,.3)}
+@media (max-width:640px){.sq.nm{padding:8px}.sq.nm h3{font-size:clamp(9.5px,2.7vw,15px);letter-spacing:.06em;line-height:1.35}}
+/* about — cream band */
+.about{background:var(--cream);color:var(--ink)}
+.about .label{color:rgba(30,36,24,.65)}
+.about .wrap{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:88px;align-items:center}
+.pwrap{position:relative;max-width:100%;isolation:isolate}
+.portrait{position:relative;aspect-ratio:4/5;max-width:100%;background:var(--terra);overflow:hidden}
+.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.portrait>span{position:absolute;bottom:18px;left:18px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:var(--cream);padding:6px 10px}
+.about .pwrap::after{content:"";position:absolute;width:38%;aspect-ratio:1;right:-12%;top:-9%;border-radius:50%;background:var(--cobalt);border:8px solid var(--cream);z-index:-1}
+.about h2{font-size:clamp(60px,7.4vw,118px);margin-block:18px 30px;color:var(--ink)}
+.about h2 em{color:var(--terra)}
+.about .txt{display:flex;flex-direction:column;gap:16px;max-width:34em;font-size:18px;color:rgba(30,36,24,.85)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:44px;border-top:2px solid var(--ink);padding-top:20px}
+.fact b{display:block;font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.05;margin-bottom:6px}
+.fact>span{font-size:14px;color:rgba(30,36,24,.7)}
+@media (max-width:900px){.about .wrap{grid-template-columns:1fr;gap:56px}.pwrap{width:min(360px,80%);margin-inline:auto}.facts{grid-template-columns:1fr}}
+
+/* contact */
+.contact .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:88px}
+.contact h2{font-size:clamp(66px,8.6vw,140px);margin-block:18px 28px;color:var(--pink)}
+.contact h2 em{color:var(--cream)}
+.contact .intro>p{color:var(--muted);max-width:26em;font-size:18px}
+form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px 28px;align-content:start}
+.fld{display:flex;flex-direction:column;gap:10px;min-width:0}
+.fld.full{grid-column:1/-1}
+label,.legend{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+input[type=text],input[type=email],input[type=tel],select,textarea{font:inherit;font-size:19px;color:var(--fg);background:transparent;border:0;border-bottom:2px solid var(--line2);border-radius:0;padding:8px 0 12px;width:100%;transition:border-color .3s}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 7px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+select option{background:var(--bg2);color:var(--fg)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pink)}
+textarea{min-height:110px;resize:vertical}
+::placeholder{color:#7F806F}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts input{position:absolute;opacity:0;pointer-events:none}
+.opts label{font:500 15px var(--f-body);letter-spacing:0;text-transform:none;color:var(--fg);border:1.5px solid var(--line2);border-radius:999px;padding:9px 18px;cursor:pointer;transition:all .3s}
+.opts label:hover{border-color:var(--fg)}
+.opts input:checked+label{background:var(--pink);color:var(--ink);border-color:var(--pink)}
+.opts input:focus-visible+label{outline:2px solid var(--pink);outline-offset:3px}
+.range{display:flex;align-items:center;gap:22px}
+input[type=range]{flex:1;min-width:0;accent-color:var(--pink)}
+output{font-family:var(--f-display);font-size:46px;line-height:1;min-width:3.4em;text-align:right;color:var(--pink);font-variant-numeric:tabular-nums}
+.ffoot{grid-column:1/-1;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.err{color:var(--pink);font-size:14px}
+.sent{grid-column:1/-1;background:var(--pink);color:var(--ink);padding:22px 24px}
+.sent b{display:block;font-family:var(--f-display);font-weight:400;font-size:32px;margin-bottom:6px}
+@media (max-width:900px){.contact .wrap{grid-template-columns:1fr;gap:56px}}
+@media (max-width:560px){form{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line)}
+footer .wrap{padding-block:60px 40px;display:flex;flex-direction:column;gap:36px}
+.bigmark{font-family:var(--f-display);font-size:clamp(90px,21vw,320px);line-height:.78;letter-spacing:-.045em;color:var(--pink)}
+.contact .mail{margin-top:14px;color:var(--muted)}.contact .mail b{color:var(--pink);font-weight:500;user-select:all}
+.bigmark em{color:var(--cream)}
+.bigmark{display:flex;align-items:flex-end;gap:.12em}.bigmark .mk{width:.95em;height:.6em;flex:none;margin-bottom:.02em}
+.frow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="grain" aria-hidden="true"></div>
+
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Mise Interiors"><svg class="mk" viewBox="0 0 190 120" aria-hidden="true"><rect x="0" y="40" width="34" height="80" fill="var(--cream)"/><path d="M34 120V62a46 46 0 0 1 92 0v58h-30V66a16 16 0 0 0-32 0v54z" fill="#C9653F"/><path d="M100 120V62a45 45 0 0 1 90 0v58h-32V66a13 13 0 0 0-26 0v54z" fill="var(--pink)"/></svg><b>Mise</b><span>Interiors</span></a>
+    <nav class="links" aria-label="Menüü">
+      <a href="#teenused"><span data-l="et">Teenused</span><span data-l="en">Services</span></a>
+      <a href="#protsess"><span data-l="et">Protsess</span><span data-l="en">Process</span></a>
+      <a href="#tood"><span data-l="et">Tööd</span><span data-l="en">Work</span></a>
+      <a href="#minust"><span data-l="et">Minust</span><span data-l="en">About</span></a>
+    </nav>
+    <div class="nav-r">
+      <div class="lang" role="group" aria-label="Keel / Language">
+        <button type="button" data-set="et" aria-pressed="true">ET</button>
+        <button type="button" data-set="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn" href="#kontakt"><span data-l="et">Küsi pakkumist</span><span data-l="en">Get a quote</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="vhero" id="hero">
+  <img class="vbg" src="img/hero.jpg" alt="" fetchpriority="high">
+  <div class="vshade"></div>
+  <div class="wrap vin">
+    <p class="label reveal"><span data-l="et">Sisekujundus · Tallinn</span><span data-l="en">Interior design · Tallinn</span></p>
+    <h1 class="reveal" style="--dl:.1s"><span data-l="et">Ruumid, millel<br>on <em>iseloom</em></span><span data-l="en">Spaces with<br>real <em>character</em></span></h1>
+    <p class="lede reveal" style="--dl:.25s"><span data-l="et">Kujundan kodusid ja äripindu, kus värv, valgus ja materjal on hoolikalt läbi mõeldud.</span><span data-l="en">I design homes and commercial spaces where colour, light and material are carefully considered.</span></p>
+    <div class="ctas reveal" style="--dl:.4s">
+      <a class="btn solid" href="#kontakt"><span data-l="et">Alusta projektiga</span><span data-l="en">Start a project</span> <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn" href="#tood"><span data-l="et">Vaata töid</span><span data-l="en">See the work</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="teenused">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="label"><span data-l="et">Teenused</span><span data-l="en">Services</span></p>
+        <h2><span data-l="et">Ühest nõuandest <em>terve projektini</em></span><span data-l="en">From one conversation <em>to the whole project</em></span></h2>
+      </div>
+      <p><span data-l="et">Vali, mida vajad praegu. Paljud alustavad konsultatsioonist ja otsustavad edasise hiljem.</span><span data-l="en">Choose what you need now. Many clients begin with a consultation and decide on the rest later.</span></p>
+    </div>
+    <div class="svc" id="svc"></div>
+  </div>
+</section>
+
+<section class="sec process" id="protsess">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="label"><span data-l="et">Protsess</span><span data-l="en">Process</span></p>
+        <h2><span data-l="et">Tühjast toast <em>valmis koduni</em></span><span data-l="en">From an empty room <em>to a finished home</em></span></h2>
+      </div>
+      <p><span data-l="et">Viis etappi. Keri edasi ja vaata, kuidas elutuba samm-sammult valmib.</span><span data-l="en">Five stages. Keep scrolling and watch the living room come together.</span></p>
+    </div>
+    <div class="pgrid">
+      <div class="steps" id="steps"></div>
+      <div class="pstage">
+        <div class="view" id="view"><canvas id="buildCv" aria-label="3D-mudel elutoast ja söögialast, mis täitub etappide kaupa"></canvas>
+          <img class="lay photo" src="img/elutuba.jpg" alt="Valmis elutuba ja söögiala: kõrgendatud elutsoon diivaniga, ümar pähklipuust laud nahktoolidega ja kuulvalgusti" loading="lazy">
+          <div class="cap"><span id="capName">3D-mudel</span><span id="capStep">01 / 05</span></div></div>
+        <div class="meter" id="meter" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="tood">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="label"><span data-l="et">Portfoolio</span><span data-l="en">Portfolio</span></p>
+        <h2><span data-l="et">Minu <em>tööd</em></span><span data-l="en">My <em>work</em></span></h2>
+      </div>
+      <p><span data-l="et">Interjöörid, mida olen kujundanud.</span><span data-l="en">Interiors I have designed.</span></p>
+    </div>
+      </div>
+  <div class="plist" id="work"></div>
+</section>
+
+<section class="sec about" id="minust">
+  <div class="wrap">
+    <div class="pwrap"><div class="portrait"><img src="img/rebecca-2.jpg" alt="Rebecca, sisekujundaja" loading="lazy"></div></div>
+    <div>
+      <p class="label"><span data-l="et">Minust</span><span data-l="en">About</span></p>
+      <h2><span data-l="et">Tere, olen <em>Rebecca</em></span><span data-l="en">Hello, I'm <em>Rebecca</em></span></h2>
+      <div class="txt">
+        <p><span data-l="et">Kujundan kodusid, mis on julged, praktilised ja ajatud. Julged, sest värv ja karakter teevad ruumist sinu oma. Praktilised, sest kodu peab igapäevaelus päriselt toimima. Ajatud, sest hea lahendus ei vaja paari aasta pärast väljavahetamist.</span><span data-l="en">I design homes that are bold, practical and timeless. Bold, because colour and character make a space your own. Practical, because a home has to work in everyday life. Timeless, because a good solution doesn't need replacing in a couple of years.</span></p>
+        <p><span data-l="et">Lisaks sisekujundusele töötan teles rekvisiitorina ja kujundan võtteplatsi visuaali. Seal tuleb ruum luua kiiresti ja nii, et see jutustaks esimesest kaadrist peale lugu. Sama pilku ja täpsust toon kaasa igasse koju.</span><span data-l="en">Alongside interior design, I work in television as a props master and create the look of the set. There a space has to come together quickly and tell its story from the very first frame. I bring the same eye and precision to every home.</span></p>
+        <p><span data-l="et">Ma ei alusta kataloogist. Alustan sinust: kuidas sa elad, mis sulle meeldib ja mis praegu häirib. Nii valmib kodu, mis on sinu nägu ja mida on hea iga päev kasutada.</span><span data-l="en">I don't start from a catalogue. I start from you: how you live, what you love and what bothers you now. That's how a home comes together that looks like you and is good to use every day.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec contact" id="kontakt">
+  <div class="wrap">
+    <div class="intro">
+      <p class="label"><span data-l="et">Kontakt</span><span data-l="en">Contact</span></p>
+      <h2><span data-l="et">Räägime sinu <em>ruumist</em></span><span data-l="en">Tell me about <em>your space</em></span></h2>
+      <p><span data-l="et">Kirjelda lühidalt ruumi ja oma soove.</span><span data-l="en">Briefly describe the space and what you have in mind.</span></p>
+      <p class="mail"><span data-l="et">või kirjuta</span><span data-l="en">or write to</span> <b>miseinteriors@gmail.com</b></p>
+    </div>
+    <form id="form" novalidate>
+      <input type="text" id="f-hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+      <div class="fld"><label for="f-name"><span data-l="et">Nimi</span><span data-l="en">Name</span></label><input id="f-name" type="text" autocomplete="name" required></div>
+      <div class="fld"><label for="f-email"><span data-l="et">E-post</span><span data-l="en">Email</span></label><input id="f-email" type="email" autocomplete="email" required></div>
+      <div class="fld"><label for="f-tel"><span data-l="et">Telefon</span><span data-l="en">Phone</span></label><input id="f-tel" type="tel" autocomplete="tel"></div>
+      <div class="fld"><label for="f-svc"><span data-l="et">Teenus</span><span data-l="en">Service</span></label><select id="f-svc"></select></div>
+      <div class="fld full"><span class="legend" id="lg-type"><span data-l="et">Ruumi tüüp</span><span data-l="en">Type of space</span></span>
+        <div class="opts" role="group" aria-labelledby="lg-type" id="types"></div>
+      </div>
+      <div class="fld full"><label for="f-area"><span data-l="et">Ligikaudne pind</span><span data-l="en">Approximate area</span></label>
+        <div class="range"><input id="f-area" type="range" min="10" max="300" step="5" value="65"><output id="o-area" for="f-area">65 m²</output></div>
+      </div>
+      <div class="fld full"><label for="f-msg"><span data-l="et">Sinu soovid</span><span data-l="en">What you have in mind</span></label><textarea id="f-msg" data-ph-et="Nt. kolmetoaline korter, soovin elutuppa julgemat värvi ja paremat valgustust." data-ph-en="E.g. a three-room flat; I'd like a bolder colour and better lighting in the living room."></textarea></div>
+      <div class="ffoot">
+        <button class="btn solid" type="submit"><span data-l="et">Saada päring</span><span data-l="en">Send request</span> <span class="arr" aria-hidden="true">→</span></button>
+        <span class="err" id="err" aria-live="polite"></span>
+      </div>
+      <div class="sent" id="sent" hidden aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="bigmark"><svg class="mk" viewBox="0 0 190 120" aria-hidden="true"><rect x="0" y="40" width="34" height="80" fill="var(--cream)"/><path d="M34 120V62a46 46 0 0 1 92 0v58h-30V66a16 16 0 0 0-32 0v54z" fill="#C9653F"/><path d="M100 120V62a45 45 0 0 1 90 0v58h-32V66a13 13 0 0 0-26 0v54z" fill="var(--pink)"/></svg><span>Mise</span></div>
+    <div class="frow"><span>© 2026 Mise Interiors · Eqpe OÜ</span><span>Tallinn · Eesti</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lang='et';
+try{const s=localStorage.getItem('rb-lang');if(s==='et'||s==='en')lang=s}catch(e){}
+
+/* palettes: wall, sofa, rug, accent (armchair/cushion), UI accent */
+const PAL=[
+ {et:'Smaragd',en:'Emerald',wall:'#2E5446',sofa:'#DCD0C0',rug:'#C9B79C',acc:'#B8664A',ui:'#D8A25A'},
+ {et:'Veinipunane',en:'Claret',wall:'#5E1F2A',sofa:'#E3D6C6',rug:'#B98D63',acc:'#2F4A3F',ui:'#E3A07F'},
+ {et:'Sinine tund',en:'Blue hour',wall:'#22315F',sofa:'#C27650',rug:'#D7C9B5',acc:'#D9B25E',ui:'#E8A189'},
+ {et:'Ooker',en:'Ochre',wall:'#B5812F',sofa:'#2B3A55',rug:'#E6DACA',acc:'#6E2430',ui:'#E9BC72'},
+ {et:'Kriit',en:'Chalk',wall:'#E4DDD2',sofa:'#3D5A4B',rug:'#B9A68D',acc:'#B8664A',ui:'#D8A25A'},
+];
+let cur=0, mode=0;
+const rooms=[];
+
+/* ================= 3D ROOM ================= */
+function makeRoom(canvas,opt){
+  if(!window.THREE)return null;
+  let renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'})}catch(e){return null}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
+  renderer.setClearColor(0x000000,0);
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(opt.fov||30,1,.1,100);
+  const target=new THREE.Vector3(...opt.look);
+  const lin=h=>new THREE.Color(h).convertSRGBToLinear();
+  const std=(c,r=.9,m=0)=>new THREE.MeshStandardMaterial({color:lin(c),roughness:r,metalness:m});
+  const add=(geo,mat,x,y,z,parent)=>{const me=new THREE.Mesh(geo,mat);me.position.set(x,y,z);me.castShadow=true;me.receiveShadow=true;(parent||scene).add(me);return me};
+  function rbox(w,h,d,r){
+    r=Math.min(r,w/2-.002,h/2-.002,d/2-.002);const s=new THREE.Shape(),e=1e-5,rr=r-e;
+    s.absarc(e,e,e,-Math.PI/2,-Math.PI,true);s.absarc(e,h-rr*2,e,Math.PI,Math.PI/2,true);
+    s.absarc(w-rr*2,h-rr*2,e,Math.PI/2,0,true);s.absarc(w-rr*2,e,e,0,-Math.PI/2,true);
+    const g=new THREE.ExtrudeGeometry(s,{depth:d-r*2,bevelEnabled:true,bevelSegments:4,steps:1,bevelSize:rr,bevelThickness:r,curveSegments:4});
+    g.center();return g;
+  }
+  const box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+  const cyl=(r1,r2,h,s=40)=>new THREE.CylinderGeometry(r1,r2,h,s);
+
+  // textures
+  function woodTex(){
+    const c=document.createElement('canvas');c.width=c.height=1024;const x=c.getContext('2d');
+    const rows=8,rh=1024/rows;
+    for(let i=0;i<rows;i++){let px=-Math.random()*400;
+      while(px<1024){const len=300+Math.random()*350,l=46+Math.random()*10,hue=27+Math.random()*6,sat=34+Math.random()*10;
+        x.fillStyle=`hsl(${hue},${sat}%,${l}%)`;x.fillRect(px,i*rh,len,rh);
+        for(let g=0;g<26;g++){x.strokeStyle=`hsla(${hue},40%,${l-12-Math.random()*8}%,${.12+Math.random()*.18})`;x.lineWidth=.6+Math.random()*1.4;x.beginPath();const yy=i*rh+Math.random()*rh;x.moveTo(px,yy);x.bezierCurveTo(px+len*.3,yy+(Math.random()-.5)*8,px+len*.7,yy+(Math.random()-.5)*8,px+len,yy+(Math.random()-.5)*6);x.stroke()}
+        x.fillStyle='rgba(30,18,10,.55)';x.fillRect(px,i*rh,2,rh);px+=len}
+      x.fillStyle='rgba(30,18,10,.5)';x.fillRect(0,i*rh,1024,2)}
+    const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2.4,2.4);t.encoding=THREE.sRGBEncoding;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;
+  }
+  function artTex(){
+    const c=document.createElement('canvas');c.width=640;c.height=440;const x=c.getContext('2d');
+    x.fillStyle='#E9E2D7';x.fillRect(0,0,640,440);
+    x.fillStyle='#C7663F';x.beginPath();x.moveTo(110,440);x.lineTo(110,210);x.arc(220,210,110,Math.PI,0);x.lineTo(330,440);x.fill();
+    x.fillStyle='#1F3B33';x.beginPath();x.arc(430,170,78,0,Math.PI*2);x.fill();
+    x.fillStyle='#D9A84E';x.fillRect(360,300,190,22);
+    x.strokeStyle='#2A2522';x.lineWidth=3;x.beginPath();x.moveTo(60,80);x.bezierCurveTo(200,40,320,120,580,70);x.stroke();
+    const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
+  }
+
+  // materials
+  const M={
+    wall:std('#2E5446',.95), floorW:new THREE.MeshStandardMaterial({map:woodTex(),roughness:.62,transparent:true,opacity:1}),
+    conc:std('#8A8580',.95), slab:std('#1C1A1E',.9), sofa:std('#DCD0C0',.97), rug:std('#C9B79C',1), acc:std('#B8664A',.85),
+    walnut:std('#4A3020',.55), trav:std('#D7CCBC',.55), brass:std('#B48C55',.32,.75), black:std('#18171A',.6),
+    leaf:new THREE.MeshStandardMaterial({color:lin('#3D5A38'),roughness:.65,side:THREE.DoubleSide}), pot:std('#E4DBCF',.4),
+    linen:std('#ECE5DA',.95), glass:new THREE.MeshBasicMaterial({color:lin('#DCE6EE')}), art:new THREE.MeshStandardMaterial({map:artTex(),roughness:.85}),
+    shade:new THREE.MeshStandardMaterial({color:lin('#F4ECDD'),roughness:.6,emissive:lin('#FFD9A0'),emissiveIntensity:0,side:THREE.DoubleSide}),
+    book1:std('#6E2430',.8),book2:std('#D9B25E',.8),book3:std('#2B3A55',.8)
+  };
+
+  const K=opt.variant==='kodu';
+  if(!K){
+  // shell
+  add(box(6.5,.25,5.5),M.slab,-.075,-.125,-.025);
+  const fc=add(new THREE.PlaneGeometry(6,5),M.conc,0,.001,0);fc.rotation.x=-Math.PI/2;
+  const fw=add(new THREE.PlaneGeometry(6,5),M.floorW,0,.003,0);fw.rotation.x=-Math.PI/2;fw.castShadow=false;
+  add(box(6.15,2.8,.15),M.wall,-.075,1.4,-2.575);
+  const lx=-3.075;
+  add(box(.15,.5,5.15),M.wall,lx,.25,-.075);
+  add(box(.15,.5,5.15),M.wall,lx,2.55,-.075);
+  add(box(.15,1.8,1.3),M.wall,lx,1.4,-1.925);
+  add(box(.15,1.8,1.9),M.wall,lx,1.4,1.55);
+  // window frame + glass
+  add(box(.06,.04,1.9),M.black,lx+.03,.52,-.35);add(box(.06,.04,1.9),M.black,lx+.03,2.28,-.35);
+  add(box(.06,1.8,.04),M.black,lx+.03,1.4,-1.26);add(box(.06,1.8,.04),M.black,lx+.03,1.4,.56);add(box(.05,1.8,.03),M.black,lx+.03,1.4,-.35);
+  const gl=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.8),M.glass);gl.position.set(lx-.05,1.4,-.35);gl.rotation.y=Math.PI/2;scene.add(gl);
+  // skirting
+  add(box(6,.08,.02),M.wall,0,.04,-2.49);
+  }
+
+  // lights
+  const hemi=new THREE.HemisphereLight(0xE8EEFF,0x3A2D22,.55);scene.add(hemi);
+  const amb=new THREE.AmbientLight(0xffffff,.12);scene.add(amb);
+  const sun=new THREE.DirectionalLight(0xFFF2E0,1.7);sun.position.set(-9,5.5,-1.2);sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-5,right:5,top:5,bottom:-5,near:1,far:30});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;scene.add(sun);scene.add(sun.target);
+  const fill=new THREE.DirectionalLight(0xC9D4FF,.35);fill.position.set(6,6,8);scene.add(fill);
+  const lamp=new THREE.PointLight(0xFFC27A,0,7,2);lamp.castShadow=true;lamp.shadow.mapSize.set(512,512);lamp.shadow.bias=-.002;scene.add(lamp);
+  const lamp2=new THREE.PointLight(0xFFB070,0,4,2);scene.add(lamp2);
+  const SB=K?[-0.3,3.7,-1.5]:[-9,5.5,-1.2];
+  if(K){Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8,far:40});sun.shadow.camera.updateProjectionMatrix();sun.target.position.set(2.8,0,-6.5);lamp.distance=8;hemi.intensity=.75;fill.position.set(3,4,6)}
+
+  // furniture groups
+  const items=[];
+  function grp(stage,x,z,ry,y0){const g=new THREE.Group();g.position.set(x,y0||0,z);g.rotation.y=ry||0;g.userData={stage,y0:y0||0,ry0:ry||0,p:0,tgt:0,start:0};scene.add(g);items.push(g);return g}
+  function buildPhoto(){
+    // Geometry reconstructed from the photo (camera at 0,1.5,0; metres)
+    const xL=-0.572,zf=-11.494,H=4.0,h1=.154,h2=.309,hp=.466,zF=-4.646,zD=-4.882,zB=-5.150;
+    function canvasTex(w,h,draw,rep){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'));const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;if(rep)t.repeat.set(rep[0],rep[1]);t.encoding=THREE.sRGBEncoding;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t}
+    const herring=canvasTex(2048,2048,x=>{const cw=96,th=22;for(let c=0;c*cw<2048;c++){const s=c%2?1:-1,x0=c*cw;for(let y=-cw-th;y<2048+cw;y+=th){x.fillStyle=`hsl(${30+Math.random()*5},${42+Math.random()*10}%,${57+Math.random()*9}%)`;x.beginPath();const ya=s>0?y:y+cw,yb=s>0?y+cw:y;x.moveTo(x0,ya);x.lineTo(x0+cw,yb);x.lineTo(x0+cw,yb+th);x.lineTo(x0,ya+th);x.closePath();x.fill();x.strokeStyle='rgba(90,58,30,.3)';x.lineWidth=1.2;x.stroke()}}},[2.2,2.2]);
+    herring.rotation=Math.PI/4;herring.center.set(.5,.5);
+    const planks=canvasTex(1024,1024,x=>{const rows=12,rh=1024/rows;for(let i=0;i<rows;i++){let px=-Math.random()*500;while(px<1024){const len=420+Math.random()*400;x.fillStyle=`hsl(${31+Math.random()*5},${44+Math.random()*8}%,${57+Math.random()*8}%)`;x.fillRect(px,i*rh,len,rh);x.fillStyle='rgba(90,58,30,.4)';x.fillRect(px,i*rh,2,rh);px+=len}x.fillStyle='rgba(90,58,30,.35)';x.fillRect(0,i*rh,1024,1.5)}},[3,3]);
+    const walnutT=canvasTex(512,1024,x=>{x.fillStyle='#5A3824';x.fillRect(0,0,512,1024);for(let i=0;i<220;i++){const xx=Math.random()*512;x.strokeStyle=`hsla(${20+Math.random()*8},40%,${20+Math.random()*16}%,${.25+Math.random()*.4})`;x.lineWidth=1+Math.random()*3;x.beginPath();x.moveTo(xx,0);x.bezierCurveTo(xx+(Math.random()-.5)*30,340,xx+(Math.random()-.5)*30,680,xx+(Math.random()-.5)*20,1024);x.stroke()}},[1,1]);
+    M.floorW.map=herring;M.floorW.needsUpdate=true;
+    M.oakTop=new THREE.MeshStandardMaterial({map:planks,roughness:.6,transparent:true,opacity:0});
+    const wal=new THREE.MeshStandardMaterial({map:walnutT,roughness:.5});
+    const trim=M.wall;
+    const ceil=new THREE.MeshStandardMaterial({color:lin('#F4F1EC'),roughness:.95,emissive:lin('#EDE8E1'),emissiveIntensity:.5});
+    const leather=M.acc,boucle=M.sofa;
+    const glassV=new THREE.MeshStandardMaterial({color:lin('#D9E4E2'),roughness:.08,metalness:.1,transparent:true,opacity:.16});
+    const led=new THREE.MeshBasicMaterial({color:lin('#FFD7A0')});
+    const fluted=new THREE.MeshStandardMaterial({map:walnutT,roughness:.5,flatShading:true});
+    const dried=std('#CDB48C',1);
+    const B=(x0,x1,y0,y1,z0,z1,mat,parent)=>add(box(x1-x0,y1-y0,z1-z0),mat,(x0+x1)/2,(y0+y1)/2,(z0+z1)/2,parent);
+    const glass=(w,h,x,y,z,ry)=>{const g=new THREE.Mesh(new THREE.PlaneGeometry(w,h),M.glass);g.position.set(x,y,z);g.rotation.y=ry||0;scene.add(g)};
+    // floor, ceiling
+    const fc=add(new THREE.PlaneGeometry(6.6,13.4),M.conc,2.1,.001,-5.0);fc.rotation.x=-Math.PI/2;
+    const fw=add(new THREE.PlaneGeometry(6.6,13.4),M.floorW,2.1,.003,-5.0);fw.rotation.x=-Math.PI/2;fw.castShadow=false;
+    const ce=add(new THREE.PlaneGeometry(7,14),ceil,2.1,H,-5.0);ce.rotation.x=Math.PI/2;ce.castShadow=false;
+    // far wall with two windows
+    const W1=[-0.44,1.26,1.27,3.57],W2=[2.52,4.11,1.06,3.59];
+    B(xL-.6,W1[0],0,H,zf-.3,zf,M.wall);B(W1[1],W2[0],0,H,zf-.3,zf,M.wall);B(W2[1],5.1,0,H,zf-.3,zf,M.wall);
+    [W1,W2].forEach(w=>{B(w[0],w[1],0,w[2],zf-.3,zf,M.wall);B(w[0],w[1],w[3],H,zf-.3,zf,M.wall);glass(w[1]-w[0],w[3]-w[2],(w[0]+w[1])/2,(w[2]+w[3])/2,zf-.2);
+      const cxw=(w[0]+w[1])/2;B(cxw-.03,cxw+.03,w[2],w[3],zf-.2,zf-.14,trim);B(w[0],w[1],w[2]+(w[3]-w[2])*.72,w[2]+(w[3]-w[2])*.72+.06,zf-.2,zf-.14,trim);
+      B(w[0]-.12,w[1]+.12,w[3],w[3]+.12,zf,zf+.04,trim);B(w[0]-.12,w[0],w[2],w[3],zf,zf+.04,trim);B(w[1],w[1]+.12,w[2],w[3],zf,zf+.04,trim)});
+    // left wall with two deep window niches
+    const N1=[-4.78,-3.07,.52],N2=[-8.36,-6.68,hp+.45];
+    B(xL-.75,xL,0,H,zf,N2[0],M.wall);B(xL-.75,xL,0,H,N2[1],N1[0],M.wall);B(xL-.75,xL,0,H,N1[1],1.5,M.wall);
+    [N1,N2].forEach(n=>{B(xL-.75,xL,0,n[2],n[0],n[1],M.wall);B(xL-.75,xL,3.62,H,n[0],n[1],M.wall);
+      glass(n[1]-n[0],3.5-n[2],xL-.7,(n[2]+3.5)/2,(n[0]+n[1])/2,Math.PI/2);B(xL-.72,xL-.66,n[2],3.5,(n[0]+n[1])/2-.03,(n[0]+n[1])/2+.03,trim)});
+    // right side: living-zone wall with walnut TV panel and far door
+    B(4.75,5.1,0,H,zf,-6.2,M.wall);
+    B(4.48,4.75,0,H,-6.39,-6.15,M.wall);
+    {const a=[4.48,-6.2],b=[3.95,-3.3],len=Math.hypot(b[0]-a[0],b[1]-a[1]);const fA=add(box(.3,H,len),M.wall,(a[0]+b[0])/2+.13,H/2,(a[1]+b[1])/2);fA.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);}
+    B(3.95,5.1,0,H,-3.5,-3.3,M.wall);B(5.0,5.1,0,H,-3.3,-1.98,M.wall);
+    B(3.85,5.12,3.42,3.62,-3.62,-3.18,trim);B(3.88,5.12,3.68,3.84,-3.58,-3.22,trim);
+    {const a=[5.0,-1.98],b=[4.15,-1.56],len=Math.hypot(b[0]-a[0],b[1]-a[1]);const j=add(box(len,H,.06),M.wall,(a[0]+b[0])/2,H/2,(a[1]+b[1])/2);j.rotation.y=-Math.atan2(b[1]-a[1],b[0]-a[0]);}B(4.15,5.3,2.64,H,-1.56,1.5,M.wall);B(4.6,5.3,0,2.64,-1.56,1.5,M.wall);
+    // cornices
+    B(xL-.02,4.75,H-.38,H,zf,zf+.18,trim);B(xL,xL+.18,H-.38,H,zf,1.5,trim);B(4.57,4.75,H-.38,H,zf,-6.2,trim);B(4.82,5.0,H-.3,H,-3.3,-1.98,trim);
+    // platform and steps (concrete core, oak skin from stage 2)
+    B(xL,4.3,0,h1,zf,zF,M.conc);B(xL,4.3,0,h2,zf,zD,M.conc);B(xL,4.3,0,hp,zf,zB,M.conc);B(4.3,4.75,0,hp,zf,-6.2,M.conc);
+    const top=(x0,x1,z0,z1,y)=>{const m=add(new THREE.PlaneGeometry(x1-x0,z1-z0),M.oakTop,(x0+x1)/2,y+.002,(z0+z1)/2);m.rotation.x=-Math.PI/2;m.castShadow=false};
+    const riser=(x0,x1,y0,y1,z)=>{const m=add(new THREE.PlaneGeometry(x1-x0,y1-y0),M.oakTop,(x0+x1)/2,(y0+y1)/2,z+.002);m.castShadow=false};
+    top(xL,4.3,zf,zB,hp);top(4.3,4.75,zf,-6.2,hp);top(xL,4.3,zB,zD,h2);top(xL,4.3,zD,zF,h1);
+    riser(xL,4.3,h2,hp,zB);riser(xL,4.3,h1,h2,zD);riser(xL,4.3,0,h1,zF);
+    // ---- stage 2: walnut joinery
+    let g=grp(2,0,0);B(4.70,4.75,hp,3.5,-9.12,-6.39,wal,g);
+    g=grp(2,0,0);B(4.70,4.75,hp,hp+2.45,-11.3,-10.4,wal,g);
+    g=grp(2,0,0);B(4.95,5.0,0,2.91,-3.09,-1.98,wal,g);
+    [[-3.04,-2.58],[-2.5,-2.03]].forEach(([z0,z1])=>{B(4.93,4.95,1.65,2.75,z0+.06,z1-.06,wal,g);B(4.93,4.95,.15,1.45,z0+.06,z1-.06,wal,g)});
+    B(4.92,4.96,0,2.91,-2.555,-2.535,std('#2A1A10',.6),g);B(4.91,4.93,1.15,1.3,-2.6,-2.585,M.brass,g);
+    // ---- stage 3: furniture
+    g=grp(3,0,0,0,hp);B(4.25,4.7,0,.45,-8.4,-6.6,wal,g);B(4.66,4.70,1.34-hp,2.37-hp,-8.39,-6.64,std('#0C0C0E',.3),g);
+    g=grp(3,0,0,0,hp);                                                       // L sofa
+    B(-0.55,0.42,0,.4,-9.6,-6.6,boucle,g);B(-0.55,-0.3,.4,.8,-9.6,-6.6,boucle,g);B(-0.3,0.8,0,.4,-8.0,-6.6,boucle,g);
+    B(-0.55,1.7,0,.4,-10.6,-9.6,boucle,g);B(-0.55,1.7,.4,.8,-10.6,-10.35,boucle,g);B(1.5,1.7,.4,.62,-10.35,-9.6,boucle,g);
+    B(-0.3,0.4,.4,.55,-9.55,-8.0,boucle,g);B(-0.28,0.78,.4,.55,-7.95,-6.65,boucle,g);B(-0.3,1.48,.4,.55,-10.33,-9.62,boucle,g);
+    g=grp(3,1.65,-7.47,0,hp);{const t=add(cyl(.5,.5,.06,48),M.trav,0,.35,0,g);t.scale.z=.64;const p2=add(cyl(.22,.26,.32,32),M.trav,0,.16,0,g);p2.scale.z=.7}
+    [[2.65,-6.75],[2.55,-7.95]].forEach(([x,z])=>{g=grp(3,x,z,-Math.PI/2,hp);
+      [-.36,.36].forEach(sx=>{add(box(.05,.5,.72),wal,sx,.25,0,g);add(box(.07,.04,.74),wal,sx,.53,0,g)});
+      add(box(.68,.04,.6),wal,0,.3,.02,g);add(rbox(.66,.12,.6,.04),leather,0,.38,.03,g);const b=add(rbox(.66,.5,.11,.05),leather,0,.66,-.29,g);b.rotation.x=-.22});
+    const tx=1.70,tz=-2.27,tr=.78;
+    g=grp(3,tx,tz);add(cyl(tr,tr,.04,72),wal,0,.73,0,g);add(cyl(.3,.34,.71,26),fluted,0,.355,0,g);
+    [215,275,338,28,92,148].forEach(deg=>{const a=deg*Math.PI/180,cx=tx+.92*Math.cos(a),cz=tz+.92*Math.sin(a),ry=Math.atan2(-Math.cos(a),-Math.sin(a));
+      g=grp(3,cx,cz,ry);[[-.21,-.2],[.21,-.2],[-.21,.2],[.21,.2]].forEach(([a1,b1])=>add(box(.035,.44,.035),wal,a1,.22,b1,g));
+      add(box(.48,.04,.46),wal,0,.44,0,g);add(rbox(.47,.07,.45,.03),leather,0,.49,.01,g);add(box(.035,.42,.035),wal,-.21,.67,-.2,g);add(box(.035,.42,.035),wal,.21,.67,-.2,g);
+      const bk=add(rbox(.46,.26,.05,.02),leather,0,.78,-.22,g);bk.rotation.x=-.12});
+    g=grp(3,4.375,-0.48,-Math.PI/2);                                          // vitrine (front faces the room)
+    const VW=2.16;add(box(VW,2.64,.04),wal,0,1.32,-.2,g);add(box(.04,2.64,.45),wal,-VW/2,1.32,0,g);add(box(.04,2.64,.45),wal,VW/2,1.32,0,g);
+    add(box(VW,.08,.45),wal,0,2.6,0,g);add(box(VW,.1,.45),wal,0,.05,0,g);
+    [.6,1.1,1.6,2.1].forEach(y=>add(box(VW-.08,.012,.38),glassV,0,y,0,g));
+    const gf=new THREE.Mesh(new THREE.PlaneGeometry(VW-.06,2.48),glassV);gf.position.set(0,1.32,.22);g.add(gf);
+    [-VW/2,0,VW/2].forEach(x=>add(box(.02,2.56,.02),M.brass,x,1.32,.225,g));
+    add(box(.012,2.4,.012),led,-VW/2+.05,1.32,.15,g);
+    // ---- stage 4: details
+    g=grp(4,0,0,0,hp);B(0,3.4,0,.02,-9.4,-6.2,M.rug,g);
+    g=grp(4,tx,tz);g.userData.lampPos=new THREE.Vector3(0,2.3,0);
+    add(cyl(.008,.008,H-2.76,8),M.brass,0,(H+2.76)/2,0,g);add(cyl(.045,.045,.04,24),M.brass,0,2.76,0,g);
+    const gb=add(new THREE.SphereGeometry(.29,40,28),M.shade,0,2.43,0,g);gb.scale.set(1,1.15,1);gb.castShadow=false;add(cyl(.05,.035,.04,24),M.brass,0,2.08,0,g);
+    g=grp(4,tx-.05,tz,0,.75);add(cyl(.2,.1,.13,32),M.pot,0,.065,0,g);
+    for(let i=0;i<18;i++){const a=Math.random()*6.28,r=Math.random()*.17,h=.18+Math.random()*.22;add(new THREE.SphereGeometry(.04+Math.random()*.045,10,8),dried,Math.cos(a)*r,h,Math.sin(a)*r,g)}
+    g=grp(4,0,0);B(xL-.7,xL-.05,N1[2],N1[2]+.12,N1[0]+.05,N1[1]-.05,boucle,g);B(xL-.65,xL-.45,N1[2]+.12,N1[2]+.5,N1[1]-.55,N1[1]-.1,trim,g);
+    B(xL-.7,xL-.05,N2[2],N2[2]+.1,N2[0]+.05,N2[1]-.05,boucle,g);
+    g=grp(4,0,0,0,hp);[[-8.9,.0],[-9.9,.5],[-7.2,0]].forEach(([z,x])=>{const c=add(rbox(.13,.4,.42,.07),trim,-.25+x*.0,.62,z,g);c.rotation.z=-.15});
+    g=grp(4,4.375,-0.48,-Math.PI/2);
+    for(let i=0;i<5;i++)add(cyl(.035,.03,.13,16),glassV,-.6+i*.25,2.18,.02,g);
+    for(let i=0;i<5;i++)add(cyl(.03,.03,.17,16),glassV,-.6+i*.27,1.69,.0,g);
+    add(cyl(.13,.08,.07,24),M.pot,-.3,1.14,0,g);add(cyl(.07,.07,.2,24),M.pot,.4,1.21,0,g);add(cyl(.18,.18,.03,24),M.pot,0,.63,0,g);
+  }
+  if(K){buildPhoto()}else{
+  // rug
+  let g=grp(3,.35,-.75);add(rbox(3.1,.025,2.1,.012),M.rug,0,.013,0,g);
+  // sofa
+  g=grp(3,.35,-1.95);
+  add(rbox(2.5,.34,1.0,.07),M.sofa,0,.25,0,g);
+  add(rbox(2.5,.62,.26,.1),M.sofa,0,.54,-.37,g);
+  add(rbox(.24,.6,1.0,.1),M.sofa,-1.13,.38,0,g);add(rbox(.24,.6,1.0,.1),M.sofa,1.13,.38,0,g);
+  add(rbox(1.0,.17,.74,.08),M.sofa,-.5,.5,.08,g);add(rbox(1.0,.17,.74,.08),M.sofa,.5,.5,.08,g);
+  add(rbox(.95,.44,.2,.1),M.sofa,-.5,.8,-.2,g);add(rbox(.95,.44,.2,.1),M.sofa,.5,.8,-.2,g);
+  [[-1.15,.4],[1.15,.4],[-1.15,-.4],[1.15,-.4]].forEach(([a,b])=>add(cyl(.025,.02,.08,12),M.black,a,.04,b,g));
+  const c1=add(rbox(.42,.4,.13,.08),M.acc,-.72,.78,.02,g);c1.rotation.set(-.25,.25,.08);
+  const c2=add(rbox(.4,.38,.13,.08),M.book2,.75,.76,.02,g);c2.rotation.set(-.25,-.3,-.06);
+  // coffee table
+  g=grp(3,.35,-.7);
+  add(cyl(.55,.55,.06,64),M.trav,0,.37,0,g);add(cyl(.3,.34,.34,48),M.trav,0,.17,0,g);
+  // armchair
+  g=grp(3,2.05,.05,-2.1);
+  add(rbox(.9,.36,.86,.1),M.acc,0,.26,0,g);add(rbox(.9,.6,.2,.1),M.acc,0,.62,-.34,g);
+  add(rbox(.16,.42,.8,.07),M.acc,-.42,.48,.02,g);add(rbox(.16,.42,.8,.07),M.acc,.42,.48,.02,g);
+  add(rbox(.78,.14,.66,.07),M.acc,0,.5,.06,g);
+  [[-.38,.36],[.38,.36],[-.38,-.36],[.38,-.36]].forEach(([a,b])=>add(cyl(.02,.015,.1,10),M.walnut,a,.05,b,g));
+  // sideboard on left wall front
+  g=grp(3,-2.72,1.55,Math.PI/2);
+  add(rbox(1.7,.62,.44,.02),M.walnut,0,.41,0,g);
+  [-.6,.6].forEach(a=>{add(cyl(.02,.02,.1,8),M.black,a,.05,.15,g);add(cyl(.02,.02,.1,8),M.black,a,.05,-.15,g)});
+  add(new THREE.BoxGeometry(.01,.5,.4),M.black,0,.41,0,g).visible=true;
+  // details stage 4
+  g=grp(4,-1.25,-1.95);                                // floor lamp
+  add(cyl(.18,.2,.035,40),M.trav,0,.018,0,g);
+  const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.03,0),new THREE.Vector3(0,1.4,0),new THREE.Vector3(.12,1.86,.08),new THREE.Vector3(.55,2.02,.3),new THREE.Vector3(.95,1.85,.55)]);
+  add(new THREE.TubeGeometry(curve,48,.014,8),M.brass,0,0,0,g);
+  const shade=add(cyl(.07,.24,.2,40),M.shade,.95,1.74,.55,g);shade.material=M.shade;
+  g.userData.lampPos=new THREE.Vector3(.95,1.62,.55);
+  g=grp(4,-2.55,-2.05);                                // plant
+  add(cyl(.2,.16,.42,40),M.pot,0,.21,0,g);
+  for(let i=0;i<16;i++){const a=i/16*Math.PI*2+Math.random()*.3,t=.35+Math.random()*.5;
+    const lf=add(new THREE.SphereGeometry(1,12,8),M.leaf,Math.cos(a)*.12*t,.6+t*.55,Math.sin(a)*.12*t,g);
+    lf.scale.set(.06,.34,.14);lf.rotation.set(Math.sin(a)*t*1.1,a,-Math.cos(a)*t*1.1)}
+  g=grp(4,.35,-2.48);                                  // art
+  add(box(1.36,.96,.04),M.walnut,0,1.68,0,g);const art=add(new THREE.PlaneGeometry(1.24,.84),M.art,0,1.68,.022,g);art.castShadow=false;
+  g=grp(4,-2.93,.98);                                  // curtain
+  for(let i=0;i<7;i++)add(cyl(.045,.045,2.55,10),M.linen,0,1.33,i*.07,g);
+  g=grp(4,2.05,-1.05);                                 // side table + books
+  add(cyl(.22,.22,.03,32),M.walnut,0,.52,0,g);add(cyl(.02,.02,.5,8),M.black,0,.26,0,g);add(cyl(.17,.17,.02,32),M.black,0,.01,0,g);
+  add(box(.26,.04,.18),M.book1,0,.555,0,g);add(box(.22,.04,.16),M.book3,.01,.595,0,g);
+  g=grp(4,-2.72,1.55);                                 // sideboard decor
+  add(cyl(.09,.06,.32,24),M.pot,0,.88,-.45,g);add(new THREE.SphereGeometry(.11,24,16),M.acc,0,.83,.2,g);
+  add(box(.18,.05,.28),M.book2,0,.745,.55,g);add(box(.16,.05,.26),M.book1,0,.795,.55,g);
+  const vas=add(cyl(.006,.006,.45,6),M.walnut,0,1.2,-.45,g);vas.rotation.z=.15;
+  g=grp(4,.25,-.72);                                   // table decor
+  add(cyl(.11,.11,.1,24),M.black,-.12,.45,.05,g);add(box(.3,.04,.22),M.book3,.18,.42,-.05,g);add(new THREE.SphereGeometry(.05,16,12),M.book2,-.12,.53,.05,g);
+  }
+  const lampGroup=items.find(i=>i.userData.lampPos);
+
+  // colours (linear, lerped)
+  const P0=K?{wall:'#EFEAE4',sofa:'#E8E2D7',rug:'#D9CDB9',acc:'#A3582F'}:PAL[0];
+  const col={wall:lin(P0.wall),sofa:lin(P0.sofa),rug:lin(P0.rug),acc:lin(P0.acc)};
+  const tcol={wall:col.wall.clone(),sofa:col.sofa.clone(),rug:col.rug.clone(),acc:col.acc.clone()};
+  const neutral=lin('#CFC9C0');
+  let colourOn=1, woodT=1, eve=0, eveT=0, step=opt.build?1:5;
+  function setPalette(p){if(K)return;tcol.wall=lin(p.wall);tcol.sofa=lin(p.sofa);tcol.rug=lin(p.rug);tcol.acc=lin(p.acc);wake()}
+  function setMode(m){if(!opt.build){eveT=m;wake()}}
+  const now=()=>performance.now()/1000;
+  function setStep(n){
+    step=n;const t=now();let k=0;
+    items.forEach(it=>{const on=n>=it.userData.stage;if(on&&!it.userData.tgt){it.userData.start=t+(k++)*.13}it.userData.tgt=on?1:0});
+    colourOn=n>=2?1:0;woodT=n>=2?1:0;eveT=(n>=5&&!K)?1:0;wake();
+  }
+  // initial state
+  if(opt.build){colourOn=0;woodT=0;M.floorW.opacity=0}
+  else{const t=now()+.35;items.forEach((it,i)=>{it.userData.tgt=1;it.userData.start=t+i*.11});}
+  if(RM)items.forEach(it=>{if(it.userData.tgt)it.userData.p=1});
+
+  // camera control
+  let az=opt.az,el=opt.el,azT=az,elT=el,drag=null,mx=0,my=0;
+  const dist=opt.dist;
+  if(!opt.camPos)canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,az:azT,el:elT};canvas.setPointerCapture(e.pointerId);canvas.style.cursor='grabbing'});
+  canvas.addEventListener('pointermove',e=>{
+    if(drag){azT=Math.max(opt.az-.75,Math.min(opt.az+.55,drag.az-(e.clientX-drag.x)*.004));elT=Math.max(.2,Math.min(.75,drag.el+(e.clientY-drag.y)*.003));wake()}
+    else if(opt.hover){const r=canvas.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5;wake()}
+  });
+  const end=()=>{drag=null;canvas.style.cursor=''};canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);
+  canvas.style.touchAction=opt.build?'pan-y':'pan-y';
+
+  function resize(){
+    const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
+    renderer.setSize(w,h,false);cam.aspect=w/h;
+    if(opt.vo){cam.aspect=1264/843;cam.setViewOffset(1264,843,0,opt.vo,1264,843)}
+    else if(opt.offset&&w>900)cam.setViewOffset(w,h,-w*opt.offset,0,w,h);else cam.clearViewOffset();
+    cam.updateProjectionMatrix();
+  }
+  addEventListener('resize',()=>{resize();wake()});resize();
+
+  const ease=t=>1-Math.pow(1-t,3);
+  let raf=0,last=now(),visible=true,idle=0;
+  function frame(){
+    raf=0;const t=now(),dt=Math.min(.05,t-last);last=t;let busy=false;
+    // items
+    items.forEach(it=>{const u=it.userData;
+      if(u.tgt){if(t>=u.start&&u.p<1){u.p=Math.min(1,u.p+dt/.95);busy=true}}else if(u.p>0){u.p=Math.max(0,u.p-dt/.35);busy=true}
+      const e=ease(u.p);it.position.y=u.y0+(1-e)*2.4;it.rotation.y=u.ry0+(1-e)*.5;it.visible=u.p>.001;
+      if(u.tgt&&t<u.start)busy=true});
+    // colours
+    const k=1-Math.exp(-dt*4.5);
+    const wt=colourOn?tcol.wall:neutral;
+    col.wall.lerp(wt,k);col.sofa.lerp(tcol.sofa,k);col.rug.lerp(tcol.rug,k);col.acc.lerp(tcol.acc,k);
+    M.wall.color.copy(col.wall);M.sofa.color.copy(col.sofa);M.rug.color.copy(col.rug);M.acc.color.copy(col.acc);
+    if(col.wall.r-wt.r>.002||wt.r-col.wall.r>.002||Math.abs(col.sofa.g-tcol.sofa.g)>.002)busy=true;
+    const wo=M.floorW.opacity;M.floorW.opacity+= (woodT-wo)*k;if(Math.abs(woodT-wo)>.003)busy=true;M.floorW.visible=M.floorW.opacity>.01;if(M.oakTop){M.oakTop.opacity=M.floorW.opacity;M.oakTop.visible=M.oakTop.opacity>.01}
+    // light mode
+    eve+=(eveT-eve)*(1-Math.exp(-dt*2.5));if(Math.abs(eveT-eve)>.003)busy=true;
+    sun.intensity=1.7*(1-eve)+.28*eve;sun.color.setRGB(1,.95-.32*eve,.88-.55*eve);
+    sun.position.set(SB[0],SB[1]-3.6*eve,SB[2]-2*eve);
+    hemi.intensity=(K?.8:.55)-.5*eve;fill.intensity=.35-.32*eve;amb.intensity=.12-.1*eve;
+    const lp=lampGroup.userData.p;
+    lamp.intensity=eve*4.2*lp;lamp2.intensity=eve*1.4;
+    lamp.position.copy(lampGroup.userData.lampPos).applyMatrix4(lampGroup.matrixWorld);
+    if(K)lamp2.position.set(4.2,1.4,-1.05);else lamp2.position.set(1.9,.75,-1.05);
+    M.shade.emissiveIntensity=eve*2;
+    M.glass.color.setRGB(.72-.68*eve,.78-.7*eve,.84-.7*eve);
+    renderer.toneMappingExposure=(K?1.22:1.05)+.25*eve;
+    // camera
+    azT+=0;az+=(azT-az)*(1-Math.exp(-dt*5));el+=(elT-el)*(1-Math.exp(-dt*5));
+    const drift=(opt.drift&&!RM)?Math.sin(t*.18)*.06:0;
+    const A=az+drift+mx*.18,E=el-my*.08;
+    if(opt.camRotY!==undefined){cam.position.set(...opt.camPos);cam.rotation.set(0,opt.camRotY,0)}
+    else if(opt.camPos){cam.position.set(...opt.camPos);cam.lookAt(target)}
+    else{cam.position.set(target.x+dist*Math.cos(E)*Math.sin(A),target.y+dist*Math.sin(E),target.z+dist*Math.cos(E)*Math.cos(A));
+    cam.lookAt(target);}
+    if(Math.abs(azT-az)>.0005||Math.abs(elT-el)>.0005)busy=true;
+    renderer.render(scene,cam);
+    if(busy)idle=0;else idle+=dt;
+    if(visible&&!document.hidden&&((opt.drift&&!RM)||busy||idle<.5))raf=requestAnimationFrame(frame);
+  }
+  function wake(){if(!raf)raf=requestAnimationFrame(frame)}
+  if('IntersectionObserver' in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible){resize();wake()}}).observe(canvas);
+  document.addEventListener('visibilitychange',wake);
+  wake();
+  if(K)window.__k={cam,target,wake,opt};
+  return {setPalette,setMode,setStep,wake};
+}
+
+const hero=null;
+const build=makeRoom($('#buildCv'),{look:[0,0,-1],camPos:[0,1.5,0],camRotY:-34.915*Math.PI/180,vo:-18.5,az:0,el:0,dist:1,fov:70.61,build:true,variant:'kodu'});
+if(build)rooms.push(build);if(hero)rooms.push(hero);
+
+/* palette + mode controls */
+function drawPal(){
+  if(!$('#pal'))return;
+  $('#pal').innerHTML=PAL.map((p,i)=>`<button type="button" class="pbtn" data-i="${i}" aria-pressed="${i===cur}" style="--p1:${p.wall};--p2:${p.sofa}"><i></i>${p[lang]}</button>`).join('');
+  $$('#pal .pbtn').forEach(b=>b.addEventListener('click',()=>setPal(+b.dataset.i)));
+}
+function setPal(i){
+  cur=i;const p=PAL[i],r=document.documentElement.style;
+  r.setProperty('--accent',p.ui);r.setProperty('--a1',p.wall);r.setProperty('--a2',p.acc);r.setProperty('--a3',p.ui);
+  $$('#pal .pbtn').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));
+  rooms.forEach(r=>r.setPalette(p));
+}
+
+/* nav state */
+const nav=$('#nav');const onS=()=>nav.classList.toggle('solid',scrollY>40);addEventListener('scroll',onS,{passive:true});onS();
+
+/* services */
+const SVC=[
+ {c:'var(--a1)',et:['Konsultatsioon','Kohtume kohapeal ja vaatame ruumi koos üle. Saad konkreetsed soovitused värvide, planeeringu, valgustuse ja mööbli kohta.',['kohapeal','kuni 2 h','kirjalik kokkuvõte']],en:['Consultation','We meet on site and review the space together. You get concrete advice on colour, layout, lighting and furniture.',['on site','up to 2 h','written summary']]},
+ {c:'var(--a2)',et:['Sisekujundus','Terviklik lahendus: ruumiplaan, värvid, materjalid, valgustus ja mööbel.',['ruumiplaan','materjalid','valgustus']],en:['Interior design','A complete scheme: layout, colours, materials, lighting and furniture.',['layout','materials','lighting']]},
+ {c:'var(--a3)',et:['3D-pilt','Näed oma kodu 3D-pildil valmis kujul enne, kui hakkad mööblit ostma või remonti tegema.',['fotorealistlik','variandid','enne ostmist']],en:['3D images','See your finished home in a 3D image before you start buying furniture or renovating.',['photorealistic','options','before you buy']]},
+ {c:'var(--a1)',et:['Sisustus','Valin mööbli, tekstiilid, valgustid ja kunsti ning koordineerin tellimused ja paigalduse.',['valik','tellimused','paigalduse koordineerimine']],en:['Furnishing','I select furniture, textiles, lighting and art, and coordinate orders and installation.',['selection','orders','installation coordination']]},
+ {c:'var(--a2)',et:['Äripinnad','Kontorid, kohvikud, salongid ja kauplused. Ruum, mis toetab tööd ja jääb klientidele meelde.',['kontor','kohvik','salong']],en:['Commercial interiors','Offices, cafés, salons and shops. Spaces that support the work and stay with your customers.',['office','café','salon']]},
+ {c:'var(--a3)',et:['Sündmused ja dekoor','Hooajalised kaunistused ning sündmuste ja pidude kujundus.',['pühad','sündmused','hooajaline dekoor']],en:['Events & decor','Seasonal decoration and design for events and celebrations.',['holidays','events','seasonal decor']]},
+];
+function drawSvc(){
+  $('#svc').innerHTML=SVC.map(s=>{const d=s[lang];return `<article class="row" style="--c:${s.c}"><h3>${d[0]}</h3><p>${d[1]}</p></article>`}).join('');
+  const sel=$('#f-svc'),v=sel.value;
+  sel.innerHTML=SVC.map((s,i)=>`<option value="${i}">${s[lang][0]}</option>`).join('')+`<option value="x">${lang==='et'?'Ei tea veel':'Not sure yet'}</option>`;
+  if(v)sel.value=v;
+}
+
+/* process */
+const STEPS=[
+ {et:['Tutvumine ja mõõdistus','Kohtume objektil ja räägime sinu soovidest ning vajadustest. Kui sul on ruumiplaan olemas, lähtun sellest. Vajadusel mõõdan ruumid üle.','esimene kohtumine'],en:['Meeting & survey','We meet on site and talk about your wishes and needs. If you already have a floor plan, I work from it. If needed, I measure the rooms myself.','first meeting']},
+ {et:['Seinad ja põrand','Valime seinte värvid ja põrandakatte. Nii on ruumi põhi paigas enne mööbli valimist.','värvid ja materjalid'],en:['Colours & materials','We choose the wall colours and flooring, so the base of the room is settled before furniture.','walls and floor']},
+ {et:['Ruumiplaan ja mööbel','Koostan ruumiplaani ja valin mööbli, mis sobib ruumi nii mõõtudelt kui ka stiililt.','ruumiplaan'],en:['Layout & furniture','I draw up the layout and choose furniture that fits the room in size and style.','layout']},
+ {et:['Detailid','Valgustid, vaibad, tekstiilid ja kunst. Need annavad ruumile iseloomu.','stilistika'],en:['Details','Lighting, rugs, textiles and art. They give the room its character.','styling']},
+ {et:['Teostus','Koordineerin tellimused, tarned ja paigalduse, nii et sina ei pea sellega ise tegelema.','koordineerimine'],en:['Delivery','I coordinate orders, deliveries and installation, so you don’t have to deal with it yourself.','coordination']},
+];
+let activeStep=1,io;
+function drawSteps(){
+  $('#steps').innerHTML=STEPS.map((s,i)=>{const d=s[lang];return `<div class="step${i===activeStep-1?' on':''}" data-s="${i+1}"><span class="n">${String(i+1).padStart(2,'0')} — 05</span><h3>${d[0]}</h3><p>${d[1]}</p></div>`}).join('');
+  
+  pickStep();
+}
+function pickStep(){
+  const els=$$('.step');if(!els.length)return;const mid=innerHeight*.5;let n=1;
+  els.forEach((el,i)=>{if(el.getBoundingClientRect().top<=mid)n=i+1});
+  if(n!==activeStep)setStep(n);
+}
+let pk=0;addEventListener('scroll',()=>{if(!pk)pk=requestAnimationFrame(()=>{pk=0;pickStep()})},{passive:true});addEventListener('resize',pickStep);
+function setStep(n){
+  activeStep=n;if(build)build.setStep(n);const v=$('#view');for(let i=1;i<=5;i++)v.classList.toggle('s'+i,i<=n);
+  $$('.step').forEach(el=>el.classList.toggle('on',+el.dataset.s===n));
+  $$('#meter i').forEach((m,i)=>m.classList.toggle('on',i<n));
+  $('#capStep').textContent=String(n).padStart(2,'0')+' / 05';
+  const C={et:['3D-mudel','3D-mudel','3D-mudel','3D-mudel','Valmis kodu · foto'],en:['3D model','3D model','3D model','3D model','Finished home · photo']};
+  $('#capName').textContent=C[lang][n-1];
+}
+
+/* portfolio: each project is a row of three squares: two images and the name */
+const PROJ=[
+ {imgs:['img/manufaktuur-1.jpg','img/manufaktuur-2.jpg'],alt:{et:['Köök terrakotavärvi seina, mustade riiulite ja helesiniste kappidega','Magamistuba salveirohelise seina, raamitud graafika ja helesinise voodipesuga'],en:['Kitchen with a terracotta wall, black shelves and pale blue cabinets','Bedroom with a sage green wall, framed prints and pale blue bedding']},et:'Näidiskorter Manufaktuuri kvartalis',en:'Show apartment in the Manufaktuuri quarter'},
+ {imgs:['img/kalaranna-1.jpg','img/kalaranna-2.jpg'],alt:{et:['Elutuba boucle-diivani, marmorlaua ja seinale kinnitatud pähklipuust telerialusega','Köök tumeda puidu, roostevabast terasest kappide ja sinaka marmorseinaga'],en:['Living room with a bouclé sofa, marble coffee table and floating walnut TV unit','Kitchen with dark wood, stainless steel cabinets and a bluish marble wall']},et:'Korter Kalarannas',en:'Apartment in Kalaranna'},
+ {imgs:['img/saaremaa-1.jpg','img/saaremaa-2.jpg'],alt:{et:['Avatud köök ja elutuba palkide all, suure klaasseina ja kaminaga','Valgustatud klaasvitriin keraamika ja linaste salvrättidega savikrohvi seina kõrval'],en:['Open kitchen and living room under timber beams, with a large glass wall and stove','Lit glass cabinet with ceramics and linen beside a clay-plastered wall']},et:'Maja Saaremaal',en:'House on Saaremaa'},
+ {imgs:['img/manufaktuur-3.jpg','img/manufaktuur-4.jpg'],alt:{et:['Magamisnišš pruuni seina, raamitud maali ja seinavalgustiga','Köök pähklipuust ülakappide, tumesiniste alumiste kappide ja marmortasapinnaga'],en:['Sleeping alcove with a brown wall, framed painting and wall lamp','Kitchen with walnut upper cabinets, navy lower cabinets and a marble worktop']},et:'Korter Manufaktuuri kvartalis',en:'Apartment in the Manufaktuuri quarter'},
+ {imgs:['img/kalamaja-1.jpg','img/kalamaja-2.jpg'],alt:{et:['Kabinet pähklipuust valgustatud riiulite, messinglaua ja oliivrohelise tooliga','Elutuba pähklipuust seinapaneelide, oliivrohelise diivani ja sinise vaibaga'],en:['Study with lit walnut shelving, a brass desk and an olive chair','Living room with walnut wall panelling, an olive sofa and a blue rug']},et:'Korter Kalamajas',en:'Apartment in Kalamaja'},
+];
+function img(p,i){const[w,f,a,g]=p.pal;
+ return i?`radial-gradient(40% 46% at 64% 58%,${a},transparent 70%),radial-gradient(30% 30% at 20% 20%,${g}88,transparent 70%),${w}`
+         :`radial-gradient(28% 34% at 26% 34%,${g}cc,transparent 70%),radial-gradient(30% 14% at 62% 74%,${a},transparent 72%),linear-gradient(to top,${f} 0 27%,transparent 27.4%),${w}`}
+const NAMECOL=['var(--pink)','var(--cream)','var(--terra)','var(--ochre)'];
+function drawWork(){
+  const smp=lang==='et'?'Näidis':'Sample';
+  const im=(p,i)=>p.imgs?`<img src="${p.imgs[i]}" alt="${p.alt[lang][i]}" decoding="async">`:`<i style="--g:${img(p,i)}"></i>${i?'':`<span class="flag">${smp}</span>`}`;
+  const POS=[0,1,2,1,0];
+  $('#work').innerHTML=PROJ.map((p,k)=>{const q=POS[k%POS.length];return `<div class="prow n${q}"><div class="sq nm"><h3>${p[lang]}</h3></div><div class="sq im" style="order:${q===0?1:0}">${im(p,0)}</div><div class="sq im" style="order:${q===2?1:3}">${im(p,1)}</div></div>`}).join('');
+}
+/* form */
+const TYPES={et:['Korter','Maja','Kontor','Äripind','Muu'],en:['Apartment','House','Office','Commercial','Other']};
+function drawTypes(){
+  const ch=[...$$('#types input:checked')].map(i=>i.value);
+  $('#types').innerHTML=TYPES[lang].map((t,i)=>`<input type="checkbox" id="t-${i}" value="${i}"${ch.includes(String(i))?' checked':''}><label for="t-${i}">${t}</label>`).join('');
+}
+const area=$('#f-area'),oa=$('#o-area');
+area.addEventListener('input',()=>{oa.textContent=(area.value>=300?'300+':area.value)+' m²'});
+const FORM_URL='https://formsubmit.co/ajax/miseinteriors@gmail.com';
+$('#form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=$('#form'),n=$('#f-name').value.trim(),m=$('#f-email').value.trim(),err=$('#err'),btn=f.querySelector('[type=submit]');
+  if(f.querySelector('#f-hp').value)return;
+  if(!n||!/^\S+@\S+\.\S+$/.test(m)){err.textContent=lang==='et'?'Lisa oma nimi ja korrektne e-posti aadress.':'Please add your name and a valid email address.';return}
+  const sel=$('#f-svc'),types=[...$$('#types input:checked')].map(c=>$('label[for="'+c.id+'"]').textContent);
+  const data={'Nimi':n,email:m,'Telefon':$('#f-tel').value.trim()||'-','Teenus':sel.options[sel.selectedIndex]?.text||'-','Ruumi tüüp':types.join(', ')||'-','Pind':oa.textContent,'Soovid':$('#f-msg').value.trim()||'-','Keel':lang.toUpperCase(),
+    _subject:'Uus päring: '+n,_replyto:m,_template:'table',_captcha:'false'};
+  err.textContent='';btn.disabled=true;btn.style.opacity=.6;
+  let ok=false;
+  try{const r=await fetch(FORM_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)});const j=await r.json().catch(()=>({}));ok=r.ok&&String(j.success)!=='false'}catch(_){}
+  btn.disabled=false;btn.style.opacity='';
+  const nm=n.replace(/</g,'&lt;'),s=$('#sent');
+  if(ok){s.hidden=false;f.reset();oa.textContent='65 m²';
+    s.innerHTML=lang==='et'?`<b>Aitäh, ${nm}!</b>Päring on saadetud. Võtan sinuga peagi ühendust.`:`<b>Thank you, ${nm}!</b>Your request has been sent. I'll be in touch soon.`}
+  else{err.innerHTML=lang==='et'?'Saatmine ei õnnestunud. Kirjuta otse: <b>miseinteriors@gmail.com</b>':'Sending failed. Please write directly to: <b>miseinteriors@gmail.com</b>'}
+});
+
+/* language */
+function setLang(l){
+  lang=l;document.documentElement.lang=l;
+  try{localStorage.setItem('rb-lang',l)}catch(e){}
+  $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.set===l));
+  $$('[data-ph-et]').forEach(el=>el.placeholder=el.dataset[l==='et'?'phEt':'phEn']);
+  drawPal();drawSvc();drawSteps();drawWork();drawTypes();
+}
+$$('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.set)));
+setLang(lang);setPal(0);setStep(1);
+})();
+</script>
+
+</body>
+</html>
